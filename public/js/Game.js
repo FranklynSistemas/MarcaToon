@@ -2,6 +2,22 @@ var SideScroller = SideScroller || {};
 
 SideScroller.Game = function(){};
 
+$(window).load(function() {
+  
+  var preloaderDelay = 350,
+    preloaderFadeOutTime = 800;
+
+    function hidePreloader() {
+      // will first fade out the loading animation
+        $(".preloader").fadeOut();
+        //then background color will fade out slowly
+        $("#faceoff").delay(preloaderDelay).fadeOut("slow");
+    }
+    
+    hidePreloader();
+    
+});
+
 var puntaje = 0,
     restart = 0,
     finSound,
