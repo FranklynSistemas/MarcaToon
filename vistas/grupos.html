@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="google" value="notranslate">    
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon-precomposed" href="img/icono.png"/>
+  <link rel="shortcut icon" type="image/png" href="img/icono.png"/> 
+  <link rel = "manifest" href = "manifest.json">
+  <title>TrikaTuka</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/alertify.min.css"/>
+  <link rel="stylesheet" href="css/themes/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="css/styleEventos.css">
+  <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+  <script src="js/alertify.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="js/socket.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/scriptGrupos.js"></script>
+</head>
+<body>
+<div style="display:none">
+  <p id="idUser">{{user._id}}</p>
+  <p id="idEvent">{{idEvent}}</p>
+  <p id="token">{{token}}</p>
+  <p id="grupo">{{grupo}}</p>
+</div>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex6-collapse">
+        <span class="sr-only">Desplegar navegación</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">TrikaTuka</a>
+      <a id="userName" class="navbar-brand" style="margin-left: 70%; position: absolute;" href="#">{{user.name}}</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex6-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/profile">Inicio</a></li>
+        <li><a href="/eventos">Eventos</a></li>
+        <li class="active"><a href="/grupos">Grupos</a></li>
+        <li><a href="/logout">Cerrar Sesión</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+
+  <div class="section group">
+  <div class="col span_1_of_3">
+  Publicidad
+  </div>
+  <div class="col span_2_of_3">
+  <div id="infoGrupos"> </div>
+  </div>
+  <div class="col span_3_of_3">
+  Publicidad
+  </div>
+</div>
+
+<div class="container">
+<!-- Modal -->
+<div id="CrearSala" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <center><h4 class="modal-title">Crea tu partida</h4></center>
+      </div>
+      <div class="modal-body">
+        <center><label for="usr"><b>Paso 1: </b>Dale un nombre a tu equipo:</label></center>
+        <input type="text" class="form-control" id="nomGrup" placeholder="Ej. El Combo"> 
+        <br>
+        <center><b>Paso 2: </b>Para jugar necesitas un equipo de {{datos.numParticipantes}} integrantes, invita a tus amigos.
+        <div class="fb-send" data-href="http://trikatuka.com/agregar?token={{token}}"></div>
+        
+        <!--<div class="fb-send" data-href="http://trikatuka.com/agregar?idUser={{user._id}}&idEvent={{idEvent}}"></div>-->
+        </center>
+        <br>  
+        <center>
+          <button type="button" id="SEspera" style="border-radius: 20px" class="btn btn-info btn-block" data-toggle="modal"><b>Paso 3: </b> Crear Equipo</button>
+        </center>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+      <!-- rocketLawyer.com-->
+    </div>
+  </div>
+ </div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="google" value="notranslate">    
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5, user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" href="img/icono.png"/> 
+    <link rel="shortcut icon" type="image/png" href="img/icono.png"/>
+    <link rel = "manifest" href = "manifest.json">
+    <title>TrikaTuka</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/alertify.min.css"/>
+	  <link rel="stylesheet" href="css/themes/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/stylelogin.css">
+    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+    <script src="js/alertify.min.js"></script>
+    <script src="js/scriptAgregar.js"></script>
+  </head>
+  <body>
+  <div style="display:none">
+    <p id="token">{{token}}</p>
+  </div>
+  <center><div id="img"></div>
+  <section class="login-form-wrap">
+  <h1>Logueate con Facebook y ¡Juega!</h1>
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+  </fb:login-button>
+<div id="status">
+ <!-- <a href='auth/facebookAgregar?dir=/grupos' type="button" class="btn btn-lg btn-block"> Login <img id="facebook" src="./img/facebook.png"></a>-->
+</section>
+</center>   
+  </body>
+</html>
+

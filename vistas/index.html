@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>MarcaToon</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel="apple-touch-icon-precomposed" href="img/Titulo.png"/>
+    <link rel="shortcut icon" type="image/png" href="img/Titulo.png"/>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/alertify.min.css"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styleJuego.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+		<script src="js/socket.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="js/gamecontroller.js"></script>
+		<script type="text/javascript" src="js/phaser.min.js"></script>
+		<script type="text/javascript" src="js/Boot.js"></script>
+		<script type="text/javascript" src="js/Preload.js"></script>
+		<script type="text/javascript" src="js/Game.js"></script>
+
+		<style>
+		  body {
+		    padding: 0px;
+		    margin: 0px;
+		  }
+		  </style>
+	</head>
+
+	<body>
+	<div id="fb-root"></div>
+		
+		<div class="container">
+			<div id="id" style="display:none">{{user._id}}</div>
+			<div id="nomUser"><p id="nameUser">{{user.name}}</p></div>
+			<div class="row">
+			    <div class="col-xs-8" style="padding-right: 0rem !important;">
+			    	<div id="start">Comenzar</div>
+			        <div class="box" id="phaser"></div>
+			        <div id="miPos"></div>
+			        <div id="pausa" class="paused"></div>
+			        <div id="sound" class="nosound"></div>
+			    </div>
+					<div class="col-xs-4" style="background-color: rgba(53, 147, 210, 0.78); padding-right: 0rem !important;">
+			        <div class="box" id="Rank">
+								<center><h1>Rank</h1></center>
+								<div id="divRank"></div>
+							</div>
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col-xs-8" style="padding-right: 0rem !important; background: rgba(0, 56, 93, 0.4);">
+			        <div class="box" id="Comentarios">
+								<center><h1>Comentarios</h1></center>
+								<div class="fb-comments" data-href="http://marcatoon.com" data-width="100%" data-numposts="5"></div>
+							</div>
+			    </div>
+					<div class="col-xs-4" style="background-color: rgba(252,248,215,.95); padding-right: 0rem !important;">
+			        <div class="box" id="Premio">
+								<center><h1>Premios</h1></center>
+								<div style="display:none; position: relative;">
+								  <iframe style="display:none;"></iframe>
+								  <script type="text/javascript">
+								    var data = {
+								      placementid: '256510591443908_256514594776841',
+								      format: 'native',
+								      testmode: false,
+								      onAdLoaded: function(element) {
+								        console.log('Audience Network [256510591443908_256514594776841] ad loaded');
+								        element.style.display = 'block';
+								      },
+								      onAdError: function(errorCode, errorMessage) {
+								        console.log('Audience Network [256510591443908_256514594776841] error (' + errorCode + ') ' + errorMessage);
+								      }
+								    };
+								    (function(w,l,d,t){var a=t();var b=d.currentScript||(function(){var c=d.getElementsByTagName('script');return c[c.length-1];})();var e=b.parentElement;e.dataset.placementid=data.placementid;var f=function(v){try{return v.document.referrer;}catch(e){}return'';};var g=function(h){var i=h.indexOf('/',h.indexOf('://')+3);if(i===-1){return h;}return h.substring(0,i);};var j=[l.href];var k=false;var m=false;if(w!==w.parent){var n;var o=w;while(o!==n){var h;try{m=m||(o.$sf&&o.$sf.ext);h=o.location.href;}catch(e){k=true;}j.push(h||f(n));n=o;o=o.parent;}}var p=l.ancestorOrigins;if(p){if(p.length>0){data.domain=p[p.length-1];}else{data.domain=g(j[j.length-1]);}}data.url=j[j.length-1];data.channel=g(j[0]);data.width=screen.width;data.height=screen.height;data.pixelratio=w.devicePixelRatio;data.placementindex=w.ADNW&&w.ADNW.Ads?w.ADNW.Ads.length:0;data.crossdomain=k;data.safeframe=!!m;var q={};q.iframe=e.firstElementChild;var r='https://www.facebook.com/audiencenetwork/web/?sdk=5.3';for(var s in data){q[s]=data[s];if(typeof(data[s])!=='function'){r+='&'+s+'='+encodeURIComponent(data[s]);}}q.iframe.src=r;q.tagJsInitTime=a;q.rootElement=e;q.events=[];w.addEventListener('message',function(u){if(u.source!==q.iframe.contentWindow){return;}u.data.receivedTimestamp=t();if(this.sdkEventHandler){this.sdkEventHandler(u.data);}else{this.events.push(u.data);}}.bind(q),false);q.tagJsIframeAppendedTime=t();w.ADNW=w.ADNW||{};w.ADNW.Ads=w.ADNW.Ads||[];w.ADNW.Ads.push(q);w.ADNW.init&&w.ADNW.init(q);})(window,location,document,Date.now||function(){return+new Date;});
+								  </script>
+								  <script type="text/javascript" src="https://connect.facebook.net/en_US/fbadnw.js" async></script>
+								  <style>
+								   .thirdPartyRoot {
+								        background-color: white;
+								        color: #444;
+								        border: 1px solid #ccc;
+								        border-left: 0;
+								        border-right: 0;
+								        font-family: sans-serif;
+								        font-size: 14px;
+								        line-height: 16px;
+								        width: 320px;
+								        text-align: left;
+								        position: relative;
+								      }
+								      .thirdPartyMediaClass {
+								        width: 320px;
+								        height: 168px;
+								        margin: 12px 0;
+								      }
+								      .thirdPartySubtitleClass {
+								        font-size: 18px;
+								        -webkit-line-clamp: 1;
+								        overflow: hidden;
+								        text-overflow: ellipsis;
+								        display: -webkit-box;
+								        height: 16px;
+								        -webkit-box-orient: vertical;
+								      }
+								      .thirdPartyTitleClass {
+								        padding-right: 12px;
+								        line-height: 18px;
+								        -webkit-line-clamp: 2;
+								        overflow: hidden;
+								        text-overflow: ellipsis;
+								        display: -webkit-box;
+								        height: 36px;
+								        -webkit-box-orient: vertical;
+								      }
+								      .thirdPartyCallToActionClass {
+								        background-color: #416BC4;
+								        color: white;
+								        border-radius: 4px;
+								        padding: 6px 20px;
+								        float: right;
+								        text-align: center;
+								        text-transform: uppercase;
+								        font-size: 11px;
+								      }
+								      .fbDefaultNativeAdWrapper {
+								        font-size: 12px;
+								        line-height: 14px;
+								        margin: 12px 0;
+								        height: 36px;
+								        vertical-align: top;
+								      }
+								  </style>
+								  <div class="thirdPartyRoot">
+								  <a class="fbAdLink">
+								    <div class="fbAdMedia thirdPartyMediaClass"></div>
+								    <div class="fbAdSubtitle thirdPartySubtitleClass"></div>
+								    <div class="fbDefaultNativeAdWrapper">
+								      <div class="fbAdCallToAction thirdPartyCallToActionClass"></div>
+								      <div class="fbAdTitle thirdPartyTitleClass"></div>
+								    </div>
+								  </a>
+								</div>
+							</div>
+					</div>
+			    </div>
+			</div>
+		</div>
+
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=256510591443908";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
+
+		<!-- include the main game file -->
+		<script src="js/main.js"></script>
+
+	</body>
+</html>
