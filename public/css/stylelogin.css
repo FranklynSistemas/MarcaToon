@@ -6,6 +6,9 @@
 
 html {
   background: #E2E2E2;
+  width: 100%;
+  height: 100%;
+
 }
 
 body {
@@ -113,17 +116,297 @@ body {
   background: #C9C9C9;
 }
 
+#container{
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 #img{
     position: relative;
     background-image: url("../assets/images/Titulo.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    width: 300px;
+    width: 320px;
+    height: 85px;
+    margin:0 auto;
+    margin-top: 10px;
+}
+
+#Proceso{
+  position: relative;
+  width: 50%;
+  height: 50px;
+  margin: 0 auto;
+}
+.bolas{
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.unoSin{
+  background: url(../img/bolas1.png) 50px 50px;
+  background-size: 100px;
+}
+.unoCom{
+  background: url(../img/bolas1.png) 0px 50px;
+  background-size: 100px;
+}
+.dosSin{
+  background: url(../img/bolas2.png) 50px 50px;
+  background-size: 100px;
+}
+.dosCom{
+  background: url(../img/bolas2.png) 0px 50px;
+  background-size: 100px;
+}
+.tresSin{
+  background: url(../img/bolas3.png) 50px 50px;
+  background-size: 100px;
+}
+.tresCom{
+  background: url(../img/bolas3.png) 0px 50px;
+  background-size: 100px;
+}
+
+#Pasos{
+    position: relative;
+    width: 50%;
+    height: 70vh;
+    margin: 0 auto;
+}
+
+#vistaUno{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(31, 119, 156);
+  border-radius: 30px;
+}
+
+#tituloUno{
+  position: relative;
+  width: 200px;
+  height: 20px;
+  margin: 0 auto;
+  text-align: center;
+  top: 40px;
+  color: white;
+}
+
+.marcas{
+  height: 60vh;
+}
+
+#marcaUno{
+  width: 200px;
+  height: 200px;
+  position: relative;
+  margin: 0 auto;
+  top: 30%;
+  background-image: url(../img/Coca.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+#marcaUno:hover{
+  -moz-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+#marcaDos{
+  width: 190px;
+  height: 190px;
+  position: relative;
+  margin: 0 auto;
+  top: 30%;
+  background-image: url(../img/Pepsi.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  -moz-transition: all .2s ease-in-out;
+  -webkit-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+#marcaDos:hover{
+  -moz-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+#vistaDos{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(31, 119, 156);
+  border-radius: 30px;
+}
+
+#tituloDos{
+  position: relative;
+  width: 200px;
+  height: 30px;
+  margin: 0 auto;
+  text-align: center;
+  top: 10px;
+  color: white;
+}
+
+#imgJuego{
+  width: 60%;
+  height: 32vh;
+  top: 15px;
+  position: relative;
+  margin: 0 auto;
+  background-image: url(../img/juego.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+#textoDos{
+  width: 80%;
+  height: 60px;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 15px;
+  font-size: 15px;
+  color: white;
+  text-align: center;
+}
+
+#Controles{
+    width: 200px;
     height: 100px;
-    margin-top: 5%;
+    position: relative;
+    top: -10px;
+    margin: 0 auto;
+
+}
+
+#Flechas{
+    width: 50px;
+    height: 100px;
+    position: relative;
+    float: right;
+    margin-left: 25px;
+}
+
+#arrowTop{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  background-image: url(../img/arrowTop.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+#arrowDown{
+  width: 50px;
+  height: 50px;
+  margin-top: 50px;
+  position: absolute;
+  background-image: url(../img/arrowDonw.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+#imgBotones{
+  width: 100px;
+  height: 50px;
+  position: relative;
+  top: 20px;
+  margin-right: 25px;
+  float: left;
+  background-image: url(../img/botones.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+#Continuar{
+  width: 200px;
+  height: 35px;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  color: white;
+  font-size: 20px;
+  background-color: #03A9F4;
+  border-radius: 20px;
+  border: solid 2px #03A9F4;
+  cursor: pointer;
+}
+
+#Continuar:hover{
+  color: white;
+  background-color: rgba(3, 169, 244, 0);
+}
+
+#vistaTres{
+  width: 100%;
+  height: 100%;
+  background-color: rgb(31, 119, 156);
+  border-radius: 30px;
+}
+
+#tituloTres{
+  position: relative;
+  margin: 0 auto;
+  width: 200px;
+  text-align: center;
+  top: 50px;
+  color: white;
+}
+
+#textoTres{
+    width: 80%;
+    height: 80px;
+    color: white;
+    position: relative;
+    margin: 0 auto;
+    font-size: 20px;
+    text-align: center;
+    top: 100px;
+}
+
+#btnFacebook{
+  width: 50%;
+  height: 50px;
+  position: relative;
+  margin: 0 auto;
+  top: 250px;
+}
+
+#afacebook{
+  background-color: #2196F3;
+  color: white;
+}
+
+#afacebook:hover{
+  background-color: white;
+  color: #2196F3;
 }
 
 #facebook {
   width: 20px;
   height: 20px;
+}
+
+@media only screen
+and (max-width: 720px){
+  #Pasos{
+    width: 80%;
+  }
+  #imgJuego{
+    width: 90%;
+    height: 22vh;
+  }
 }

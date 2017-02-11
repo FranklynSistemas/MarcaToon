@@ -95,6 +95,16 @@ exports.updPuntaje = function(data,callback){
 	 });
 }
 
+exports.getEquipos = function(callback){
+	Equipo.find({}, function(err, data){
+		if(data){
+			callback({status:true, datos: calculaPuntajes(data)});
+		}else{
+			callback({status:false});
+		}
+	});
+}
+
 function buscaUser(nombre,array){
   for(i in array){
       if(array[i].Nombre === nombre){
@@ -104,6 +114,27 @@ function buscaUser(nombre,array){
     }
   return -1;
 }
+
+function calculaPuntajes(data){
+	var puntajes = [0,0];
+	for (var i = 0; i < data.length; i++) {
+		for (var j = 0; j < data[i].participantes.length; j++) {
+			puntajes[i] += data[i].participantes[j].Puntaje;
+		}
+	}
+
+	return [
+				{	id: data[0].id,
+					name: data[0].name,
+					puntaje: puntajes[0]
+				},
+				{	id: data[1].id,
+					name: data[1].name,
+					puntaje: puntajes[1]
+				},
+
+			];
+};
 
 exports.traeUser =  function (req, res) {
 	User.findOne({"_id" : req.body.id}, function(err, data){

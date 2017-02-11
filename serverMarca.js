@@ -6,7 +6,7 @@ var express        = require('express');
 var app            = express();
 var session = require('express-session');
 var httpServer = require("http").createServer(app);
-httpServer.listen(3000);
+httpServer.listen(3002);
 
 var multipart = require('connect-multiparty');
 app.use(multipart()) //Express 4
@@ -68,7 +68,7 @@ var newGame = false,
 var Salas = mongoose.model('salas');
 var Equipos = mongoose.model('equipos');
 var Partidas = mongoose.model('partidas');
-console.log('Servidor disponible en http://localhost:' + 3000);
+console.log('Servidor disponible en http://localhost:' + 3002);
 
 //Socket connection handler
 
@@ -104,6 +104,11 @@ socket.on('updatePuntaje',function(data){
   });
 });
 
+socket.on('traeEquipos',function(){
+  consultas.getEquipos(function(result){
+     io.sockets.emit('Equipos',result);
+  });
+});
 
 
 //============Fin MarcaToon=================

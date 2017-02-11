@@ -5,17 +5,33 @@ SideScroller.Game = function(){};
 $(window).load(function() {
   
   var preloaderDelay = 350,
-    preloaderFadeOutTime = 800;
+  preloaderFadeOutTime = 800;
 
     function hidePreloader() {
       // will first fade out the loading animation
         $(".preloader").fadeOut();
         //then background color will fade out slowly
         $("#faceoff").delay(preloaderDelay).fadeOut("slow");
+
+        if(isMobile.any() && window.innerHeight > window.innerWidth){
+            NoPortrait();
+        }
+
+    }
+
+    function NoPortrait(){
+      $("#NoPortrait").fadeIn();
     }
     
     hidePreloader();
-    
+
+    $( window ).on( "orientationchange", function( event ) {
+       if(window.orientation === -90 || window.orientation === 90){
+        $("#NoPortrait").fadeOut();
+       }else{
+        NoPortrait();
+       }
+    });
 });
 
 var puntaje = 0,
@@ -26,7 +42,9 @@ var puntaje = 0,
     equipo = {},
     pausa = true,
     comenzar = false,
-    sound = true;
+    sound = true,
+    jump=false,
+    down=false;
    
 var websocket = io.connect();
 
@@ -37,10 +55,13 @@ $( document ).ready(function() {
   var $start = $("#start");
   var $pausa = $("#pausa");
   var $sound = $("#sound");
-
+  var $jump = $("#jump");
+  var $down = $("#down");
+  var $Equipos = $("#Equipos");
+  var idEquipo = localStorage.getItem("Equipo");
   equipo ={
-    id: 1,
-    name: "Cocacola"
+    id: idEquipo,
+    name: idEquipo === 1 ? "Cocacola" : "Pepsi"
   } //Pendiente Por definir
   user = {
     nomUser: $nameUser,
@@ -60,6 +81,8 @@ $( document ).ready(function() {
     llenaRank(data.datos);
   });
 
+
+
   function llenaRank(datos){
     var html = "";
     var participantesOrdenados = ordenarArray(datos.participantes);
@@ -70,6 +93,26 @@ $( document ).ready(function() {
       html += "<p>"+cont+". "+participantesOrdenados[i].Nombre+" - "+participantesOrdenados[i].Puntaje+"</p>";
     }
     $divRank.html(html);
+  }
+
+  websocket.emit('traeEquipos');
+  websocket.on('Equipos',function(result){
+    llenaPosEquipo(result);
+  });
+
+  function llenaPosEquipo(result){
+    var html = "<h1>Rank General</h1>";
+    
+    if(result.status){
+      if(result.datos[0].puntaje < result.datos[1].puntaje){
+        html += "<h3>"+result.datos[1].name+" - "+result.datos[1].puntaje+" pts</h3>";
+        html += "<h3>"+result.datos[0].name+" - "+result.datos[0].puntaje+" pts</h3>";
+      }else{
+        html += "<h3>"+result.datos[0].name+" - "+result.datos[0].puntaje+" pts</h3>";
+        html += "<h3>"+result.datos[1].name+" - "+result.datos[1].puntaje+" pts</h3>";
+      } 
+      $Equipos.html(html);
+    }
   }
 
   function buscaUser(nombre,array){
@@ -151,6 +194,24 @@ $( document ).ready(function() {
     sound = !sound;
   });
 
+ 
+  $jump.on('touchstart mousedown',function(){
+    jump=true; 
+  });
+
+  $jump.on('touchend mouseup',function(){
+    jump=false; 
+  });
+
+  $down.on('touchstart mousedown',function(){
+    down=true; 
+  });
+
+  $down.on('touchend mouseup',function(){
+    down=false; 
+  });
+
+
 });
 
 
@@ -172,7 +233,7 @@ SideScroller.Game.prototype = {
     fondoMontanas = this.game.add.tileSprite(0, -400, this.game.world.width, this.game.world.height*2, 'background'); 
     fondo = this.game.add.tileSprite( this.game.world.width/2 -145, 40, 300, 70, 'fondo');
 
-   
+    
 
     //game params
     this.levelSpeed = -250;
@@ -212,20 +273,25 @@ SideScroller.Game.prototype = {
       newItem.body.velocity.x = this.levelSpeed;
     }
 */
-
+    var monedas = {
+        coins: equipo.id === 1 ? 'coca' : 'pepsi',
+        Othercoins: equipo.id === 1 ? 'pepsi' : 'coca'
+    }
 
 
     this.coins = this.game.add.group();
     this.coins.enableBody = true;
     //this.coins.createMultiple(6, 'goldCoin');
-    this.coins.createMultiple(12, 'coca');
+    //this.coins.createMultiple(12, 'coca');
+    this.coins.createMultiple(12, monedas.coins);
     this.coins.setAll('checkWorldBounds', true);
     this.coins.setAll('outOfBoundsKill', true);
 
     this.Othercoins = this.game.add.group();
     this.Othercoins.enableBody = true;
     //this.coins.createMultiple(6, 'goldCoin');
-    this.Othercoins.createMultiple(12, 'pepsi');
+    //this.Othercoins.createMultiple(12, 'pepsi');
+    this.Othercoins.createMultiple(12, monedas.Othercoins);
     this.Othercoins.setAll('checkWorldBounds', true);
     this.Othercoins.setAll('outOfBoundsKill', true);
 
@@ -252,6 +318,20 @@ SideScroller.Game.prototype = {
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
     Juego = this.game;
+
+    // create our virtual game controller buttons 
+    /*buttonjump = this.game.add.button(10, this.game.world.height-140, 'buttonjump', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+    buttonjump.fixedToCamera = true;  //our buttons should stay on the same place  
+    buttonjump.events.onInputDown.add(function(){jump=true;},this);
+    buttonjump.events.onInputUp.add(function(){jump=false;});
+
+    // create our virtual game controller buttons 
+    buttondown = this.game.add.button(80, this.game.world.height-140, 'buttondown', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+    buttondown.fixedToCamera = true;  //our buttons should stay on the same place  
+    buttondown.events.onInputDown.add(function(){down=true;});
+    buttondown.events.onInputUp.add(function(){down=false;});*/
+
+    
     //init game controller
     this.initGameController();
 
@@ -283,14 +363,14 @@ SideScroller.Game.prototype = {
       }
 
 
-      if(this.cursors.up.isDown) {
+      if(this.cursors.up.isDown || jump) {
         this.playerJump();
       }
-      else if(this.cursors.down.isDown) {
+      else if(this.cursors.down.isDown || down) {
         this.playerDuck();
       }
-
-      if(!this.cursors.down.isDown && this.player.isDucked && !this.pressingDown) {
+      
+      if(!this.cursors.down.isDown && this.player.isDucked && !this.pressingDown && !down) {
         //change image and update the body size for the physics engine
         this.player.loadTexture('player');
         this.player.body.setSize(this.player.standDimensions.width, this.player.standDimensions.height);
@@ -307,9 +387,10 @@ SideScroller.Game.prototype = {
     }
 
     if(user.puntaje < puntaje){
-          user.puntaje=puntaje
-          websocket.emit('updatePuntaje',{user:user,equipo:equipo});
-        };
+      user.puntaje=puntaje
+      websocket.emit('updatePuntaje',{user:user,equipo:equipo});
+      websocket.emit('traeEquipos');
+    };
 
     /*
     if (restart) {
@@ -374,7 +455,7 @@ SideScroller.Game.prototype = {
               Othercoin.body.enable = true;
               //Othercoin.angle = -90;
               //Othercoin.body.angularVelocity = this.game.rnd.integerInRange(100, 125);
-              Othercoin.body.angularVelocity = 100;
+              Othercoin.body.angularVelocity = -100;
             }
           }
 
@@ -405,9 +486,6 @@ SideScroller.Game.prototype = {
 
       this.playerDead()
     }
-  },
-  playerHito: function(){
-
   },
   playerDead: function(){
      var style = { font: "20px Arial", fill: "#ffffff", wordWrap: true, wordWrapWidth: 600};
