@@ -268,10 +268,21 @@ body {
   top: 15px;
   position: relative;
   margin: 0 auto;
+}
+
+.imgCoca{
   background-image: url(../img/juego.jpg);
   background-repeat: no-repeat;
   background-size: 100%;
 }
+
+.imgPepsi{
+  background-image: url(../img/juegoPepsi.jpg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+
 
 #textoDos{
   width: 80%;

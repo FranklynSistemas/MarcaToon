@@ -11,6 +11,7 @@ $(function() {
 	$equipoUno = $("#equipoUno");
 	$equipoDos = $("#equipoDos");
 	$Continuar = $("#Continuar");
+	$imgJuego = $("#imgJuego");
 
 
 	$vistaTres = $("#vistaTres");
@@ -55,7 +56,8 @@ $(function() {
 				$Uno.addClass("unoCom");
 				$vistaDos.fadeIn(500);
 				localStorage.setItem("Equipo", eq);
-				eq === 1 ? $equipoUno.fadeIn() : $equipoDos.fadeIn(); 
+				if(eq === 1){ $equipoUno.fadeIn(); $imgJuego.addClass('imgCoca'); }else{ $equipoDos.fadeIn(); $imgJuego.addClass('imgPepsi'); }; 
+
 			break;
 			case 2:
 				$vistaDos.fadeOut();

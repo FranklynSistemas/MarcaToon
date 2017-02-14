@@ -44,7 +44,8 @@ var puntaje = 0,
     comenzar = false,
     sound = true,
     jump=false,
-    down=false;
+    down=false,
+    contSound = 0;
    
 var websocket = io.connect();
 
@@ -58,7 +59,9 @@ $( document ).ready(function() {
   var $jump = $("#jump");
   var $down = $("#down");
   var $Equipos = $("#Equipos");
-  var idEquipo = localStorage.getItem("Equipo");
+  var $numUsers = $("#numUsers");
+  var $dias = $("#dias");
+  var idEquipo = parseInt(localStorage.getItem("Equipo"));
   equipo ={
     id: idEquipo,
     name: idEquipo === 1 ? "Cocacola" : "Pepsi"
@@ -90,7 +93,7 @@ $( document ).ready(function() {
     var cont = 0;
     for (var i = 0; i < participantesOrdenados.length; i++) {
       cont++;
-      html += "<p>"+cont+". "+participantesOrdenados[i].Nombre+" - "+participantesOrdenados[i].Puntaje+"</p>";
+      html += "<p>"+cont+". "+participantesOrdenados[i].Nombre+" - <b>"+participantesOrdenados[i].Puntaje+"</b></p>";
     }
     $divRank.html(html);
   }
@@ -98,6 +101,11 @@ $( document ).ready(function() {
   websocket.emit('traeEquipos');
   websocket.on('Equipos',function(result){
     llenaPosEquipo(result);
+  });
+
+  websocket.on('numUsers',function(cont){
+    $numUsers.html("En Línea: "+cont)
+
   });
 
   function llenaPosEquipo(result){
@@ -190,6 +198,7 @@ $( document ).ready(function() {
     }else{
       $(this).removeClass("sound");
       $(this).addClass("nosound");
+      contSound = 0;
     } 
     sound = !sound;
   });
@@ -211,6 +220,21 @@ $( document ).ready(function() {
     down=false; 
   });
 
+  function diasFaltantes(){
+    var Hoy=new Date();
+    var Nav=new Date(Hoy.getFullYear(), 01,28 );
+    var mseg_dia=1000*60*60*24;
+    var dias;
+    if (Hoy.getMonth()==11 && Hoy.getDate()>25){ 
+      Nav.setFullYear(Nav.getFullYear()+1); 
+      dias = Math.ceil((Nav.getTime()-Hoy.getTime())/(mseg_dia));
+      $dias.html("Faltan: "+dias);
+    }else{
+      dias = Math.ceil((Nav.getTime()-Hoy.getTime())/(mseg_dia));
+      $dias.html("Faltan: "+dias+" días");
+    }
+    
+  };diasFaltantes();
 
 });
 
@@ -266,9 +290,9 @@ SideScroller.Game.prototype = {
     this.verticalObstacles.createMultiple(12, 'square');
     this.verticalObstacles.setAll('checkWorldBounds', true);
     this.verticalObstacles.setAll('outOfBoundsKill', true);
-
-    /*for(var i=0; i<12; i++) {
-      newItem = this.verticalObstacles.create(null, this.game.world.height - this.tileSize, 'floor');
+/*
+    for(var i=0; i<12; i++) {
+      newItem = this.verticalObstacles.create(i * this.tileSize, this.game.world.height - this.tileSize+60, 'square');
       newItem.body.immovable = true;
       newItem.body.velocity.x = this.levelSpeed;
     }
@@ -277,6 +301,8 @@ SideScroller.Game.prototype = {
         coins: equipo.id === 1 ? 'coca' : 'pepsi',
         Othercoins: equipo.id === 1 ? 'pepsi' : 'coca'
     }
+
+    console.log(equipo);
 
 
     this.coins = this.game.add.group();
@@ -303,7 +329,7 @@ SideScroller.Game.prototype = {
     this.game.physics.arcade.enable(this.player);
 
     //player gravity
-    this.player.body.gravity.y = 1000;
+    this.player.body.gravity.y = 1500;
 
     //properties when the player is ducked and standing, so we can use in update()
     var playerDuckImg = this.game.cache.getImage('playerDuck');
@@ -338,9 +364,19 @@ SideScroller.Game.prototype = {
     //sounds
     this.coinSound = this.game.add.audio('coin');
     finSound = this.game.add.audio('fin');
-  },
+    finSoundPared = this.game.add.audio('finPared');
+
+    soundFondo = this.add.audio('lollipop',1,true);  
+
+    
+    //console.log(soundFondo);
+    
+    //this.game.sound.setDecodedCallback([ soundFondo ], this.startAudio, this);
+    //soundFondo.play();
+    //soundFondo.loopFull(0.6);
+  }, 
   update: function() {
-    console.log("update");
+
     if(!pausa){
        this.game.paused = pausa;
     }
@@ -377,12 +413,18 @@ SideScroller.Game.prototype = {
         this.player.isDucked = false;
       }
 
+      if(this.cursors.right.isDown){
+        this.playerRight();
+      }else if(this.cursors.left.isDown){
+        this.playerLeft()
+      }
+
       //restart the game if reaching the edge
-      if(this.player.x <= -this.tileSize) {
-       this.playerDead();
+      if(this.player.x <= -this.tileSize+50) {
+       this.playerDead(2);
       }
       if(this.player.y >= this.game.world.height + this.tileSize) {
-        this.playerDead();
+        this.playerDead(1);
       }
     }
 
@@ -401,8 +443,18 @@ SideScroller.Game.prototype = {
     */
     //generate further terrain
     fondoMontanas.tilePosition.x += this.levelSpeed/800;
+    this.initSound();
     this.generateTerrain();
 
+  },
+  initSound: function(){
+    contSound += 1;
+    if(!sound){
+      soundFondo.stop();
+    }else if(sound && contSound===1){
+      soundFondo.play('', 0, 1, true);
+      soundFondo.onLoop.add(this.playLevelMusic, this);
+    }
   },
   generateTerrain: function(){
     var i, delta = 0, block;
@@ -418,10 +470,11 @@ SideScroller.Game.prototype = {
           this.lastCliff = false;
           this.lastVertical = true;
           block = this.verticalObstacles.getFirstExists(false);
-          block.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 3 * this.tileSize);
-          block.body.velocity.x = this.levelSpeed;
-          block.body.immovable = true;
-
+          if(block!= null){
+            block.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 3 * this.tileSize);
+            block.body.velocity.x = this.levelSpeed;
+            block.body.immovable = true;
+          }
           coin = this.coins.getFirstExists(false);
           if(coin != null){
             coin.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 4 * this.tileSize);
@@ -446,9 +499,10 @@ SideScroller.Game.prototype = {
             
           }
 
-          if(Math.random() < this.probOtherCoins){
+         if(Math.random() < this.probOtherCoins){
             Othercoin = this.Othercoins.getFirstExists(false);
             if(Othercoin) {
+              console.log("entra other coins");
               Othercoin.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 1.5 * this.tileSize);
               Othercoin.anchor.setTo(0.5, 0.5);
               Othercoin.body.velocity.x = this.levelSpeed-50;
@@ -464,7 +518,6 @@ SideScroller.Game.prototype = {
           this.lastCliff = false;
           this.lastVertical = false;
         }
-
         this.floors.getAt(i).body.x = this.lastFloor.body.x + this.tileSize + delta * this.tileSize * 1.5;
         this.lastFloor = this.floors.getAt(i);
         break;
@@ -484,17 +537,20 @@ SideScroller.Game.prototype = {
       //change sprite image
       this.player.loadTexture('playerDead');
 
-      this.playerDead()
+      this.playerDead(1)
     }
   },
-  playerDead: function(){
+  playerDead: function(type){
      var style = { font: "20px Arial", fill: "#ffffff", wordWrap: true, wordWrapWidth: 600};
       text = this.game.add.text(this.game.world.width/2 , this.game.world.height/2, "F i n  d e l  j u e g o !", style);
       text.anchor.set(0.5);
       restart += 1;
-      if(restart === 1 && sound){
+      if(restart === 1 && sound && type === 1){
         finSound.play();
+      }else if(restart === 1 && sound && type === 2){
+        finSoundPared.play();
       }
+      soundFondo.stop();
       //go to gameover after a few miliseconds
       this.game.time.events.add(1500, this.gameOver, this);
   },
@@ -522,6 +578,9 @@ SideScroller.Game.prototype = {
 
     //remove sprite
     collectable.kill();
+  },
+  playLevelMusic: function(){
+     soundFondo.play('', 0, 1, true);
   },
   initGameController: function() {
 
@@ -577,11 +636,22 @@ SideScroller.Game.prototype = {
   gameOver: function() {
     puntaje = 0;
     restart = 0;
+    contSound = 0;
     Juego.state.start('Game');
   },
   playerJump: function() {
     if(this.player.body.touching.down) {
       this.player.body.velocity.y -= 700;
+    }
+  },
+  playerRight: function() {
+    if(this.player.body.touching.down) {
+      this.player.body.velocity.x += 300;
+    }
+  },
+  playerLeft:function(){
+    if(this.player.body.touching.down) {
+          this.player.body.velocity.x -= 300;
     }
   },
   playerDuck: function() {

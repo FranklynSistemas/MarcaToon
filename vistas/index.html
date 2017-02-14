@@ -58,8 +58,10 @@
 		<div class="container">
 			<div id="id" style="display:none">{{user._id}}</div>
 			<div id="nomUser"><p id="nameUser">{{user.name}}</p></div>
+			<div id="numUsers"></div>
 			<div class="row">
 			    <div class="col-xs-8" id="juego" style="padding-right: 0rem !important;">
+			    	<div id="dias"></div>
 			    	<div id="start">Comenzar</div>
 			        <div class="box" id="phaser"></div>
 			        <div id="Botones">
@@ -74,24 +76,28 @@
 			        <div class="fb-share-button" data-href="http://marcatoon.com" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fmarcatoon.com%2F&amp;src=sdkpreparse">Compartir</a></div>
 			        </div>
 			    </div>
-					<div class="col-xs-4" id="contentRank" style="background-color: rgba(53, 147, 210, 0.78); padding-right: 0rem !important;">
+					<div class="col-xs-4" id="contentRank" style="background-color: rgb(47, 62, 77); padding-right: 0rem !important; padding-left: 0rem !important;">
 			        <div class="box" id="Rank">
 			        			<div id="Equipos"></div>
-								<center><h1>Rank</h1></center>
+								<div id="titleRank"><h1>Rank</h1></div>
 								<div id="divRank"></div>
 					</div>
 			    </div>
 			</div>
 			<div class="row">
-			    <div class="col-xs-8" style="padding-right: 0rem !important; background: rgba(0, 56, 93, 0.4);">
+			    <div class="col-xs-8" style="padding-right: 0rem !important; background: white;">
 			        <div class="box" id="Comentarios">
 								<center><h1>Comentarios</h1></center>
 								<div class="fb-comments" data-href="http://marcatoon.com" data-width="100%" data-numposts="5"></div>
 							</div>
 			    </div>
-					<div class="col-xs-4" style="background-color: rgba(252,248,215,.95); padding-right: 0rem !important;">
+					<div class="col-xs-4" id="contentPremio">
 			        <div class="box" id="Premio">
 						<center><h1>Premios</h1></center>
+						<div id="Premios">
+							<div id="Premio01">	
+							</div>
+						</div>
 					</div>
 			    </div>
 			</div>

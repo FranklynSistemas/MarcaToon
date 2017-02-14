@@ -27,8 +27,12 @@ SideScroller.Preload.prototype = {
     this.load.image('pepsi', 'assets/images/Pepsi.png');
     this.load.spritesheet('button', 'assets/images/button_sprite_sheet.png', 193, 71);
 
-    this.load.audio('coin', 'assets/audio/coin.wav');
-    this.load.audio('fin', 'assets/audio/tada.mp3');
+    this.load.audio('coin', 'assets/audio/success.mp3');
+    this.load.audio('fin', 'assets/audio/caidaCut.mp3');
+    this.load.audio('finPared', 'assets/audio/splash.mp3');
+    this.load.audio('lollipop', 'assets/audio/lollipop.mp3');
+    
+    
   },
   create: function() {
     this.state.start('Game');
