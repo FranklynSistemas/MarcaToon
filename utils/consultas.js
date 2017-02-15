@@ -31,8 +31,9 @@ exports.CreaEquipo = function(datos,callback){
                 name: datos.equipo.name,
     						id: datos.equipo.id,
     						participantes: 	[{ 	Nombre: datos.user.nomUser,
-    																Puntaje: 0
-    														}],
+    											Puntaje: 0,
+    											Foto: datos.user.foto
+    										}],
 			    			numJugadores: 1,
 			    			puntaje: 0,
 			    			jugando: false,
@@ -54,7 +55,8 @@ exports.AddUser = function(data, callback){
 	}else{
 		data.equipo.participantes.push({
 			Nombre: data.datos.user.nomUser,
-			Puntaje: 0
+			Puntaje: 0,
+			Foto: datos.user.foto
 		});
 		updateEquipo({id:data.equipo.id, dateUpd: {participantes:data.equipo.participantes} }, function(result){
 			if (result.status) {

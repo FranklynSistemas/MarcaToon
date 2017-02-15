@@ -161,6 +161,14 @@ html,body{
   padding-top: 10px;
 }
 
+.imgPerfil{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
 #dias{
   width: 180px;
   height: 30px;
@@ -298,13 +306,71 @@ html,body{
   background-image: url(../assets/images/nosound.png);
 }
 
+#info{
+  position: relative;
+  z-index: 6;
+  margin-top: -40px;
+  margin-left: 85px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  background-image: url(../img/information.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+#tree{
+  color: rgba(139, 195, 74, 0.87);
+}
+
+#tree:hover{
+  color: rgb(123, 185, 52);
+}
+
+#flechas{
+  width: 128px;
+  height: 64px;
+  position: absolute;
+  margin-top: -115px;
+  z-index: 6;
+  margin-left: 20px;
+  display: none;
+}
+
+#left{
+  width: 64px;
+  height: 64px;
+  position: relative;
+  float: left;
+  cursor: pointer;
+  background: url(../assets/images/arrowLeft.png) 64px 64px;
+}
+
+#left:hover{
+   background: url(../assets/images/arrowLeft.png) 128px 64px;
+}
+
+#right{
+  width: 64px;
+  height: 64px;
+  position: relative;
+  float: right;
+  cursor: pointer;
+  background: url(../assets/images/arrowRight.png) 64px 64px;
+}
+
+#right:hover{
+  background: url(../assets/images/arrowRight.png) 128px 64px;
+}
+
 #Botones{
   width: 128px;
   height: 64px;
   position: absolute;
-  margin-top: -170px;
-  margin-left: 10px;
+  margin-top: -145px;
   z-index: 6;
+  margin-left: 55%;
+  display: none;
 }
 #jump{
   width: 64px;
@@ -416,8 +482,22 @@ canvas{
 
 /* iPhone 5 (landscape)----------- */
 @media only screen
-and (max-width: 720px)
+and (max-width: 760px)
 and (orientation : landscape) {
+
+  #dias{
+    font-size: 15px;
+    margin-top: 5px;
+    margin-left: 33%;
+  }
+
+  #numUsers{
+    left: 83%;
+    width: 100px;
+    height: 20px;
+    font-size: 12px;
+  }
+
   #Equipos{
     font-size: 10px;
     line-height: 15px;
@@ -439,8 +519,8 @@ and (orientation : landscape) {
   }
 
   #Botones{
-    margin-top: -112px;
-    margin-left: 4px;
+    margin-top: -120px;
+    margin-left: 55%;
   }
 
   #compartir{
@@ -454,6 +534,10 @@ and (orientation : landscape) {
     max-width: 78.666667% !important;
   }
 
+  #Rank{
+    padding-right: 2px;
+  }
+
   #contentRank{
     flex-basis: 20.333333%;
     max-width: 20.333333%;
@@ -461,7 +545,7 @@ and (orientation : landscape) {
 
   #divRank{
     font-size: 10px;
-    height: 49vh;
+    height: 40vh;
     overflow-y: scroll;
   }
 

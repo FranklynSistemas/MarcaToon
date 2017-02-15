@@ -3,8 +3,9 @@ var SideScroller = SideScroller || {};
 SideScroller.Game = function(){};
 
 $(window).load(function() {
-  
-  var preloaderDelay = 350,
+ 
+
+  var preloaderDelay = 550,
   preloaderFadeOutTime = 800;
 
     function hidePreloader() {
@@ -28,6 +29,8 @@ $(window).load(function() {
     $( window ).on( "orientationchange", function( event ) {
        if(window.orientation === -90 || window.orientation === 90){
         $("#NoPortrait").fadeOut();
+        $botones.fadeIn();
+        $flechas.fadeIn();
        }else{
         NoPortrait();
        }
@@ -45,28 +48,50 @@ var puntaje = 0,
     sound = true,
     jump=false,
     down=false,
-    contSound = 0;
+    left=false,
+    right=false,
+    contSound = 0,
+    levelSpeed,
+    level = 1;
    
 var websocket = io.connect();
 
 $( document ).ready(function() {
+
+  var $flechas = ("#flechas");
+  var $botones = ("#Botones");
+
+ 
+  (function btn(){
+    if(isMobile.any()){
+      $botones.fadeIn();
+      $flechas.fadeIn();
+    }
+  })();
+  
   
   var $nameUser = $("#nameUser").text();
+  var $idFace = $("#idFace").html();
   var $miPos = $("#miPos");
   var $start = $("#start");
   var $pausa = $("#pausa");
   var $sound = $("#sound");
   var $jump = $("#jump");
   var $down = $("#down");
+  var $left = $("#left");
+  var $right = $("#right");
   var $Equipos = $("#Equipos");
   var $numUsers = $("#numUsers");
   var $dias = $("#dias");
+  var $info = $("#info");
   var idEquipo = parseInt(localStorage.getItem("Equipo"));
+
   equipo ={
     id: idEquipo,
     name: idEquipo === 1 ? "Cocacola" : "Pepsi"
   } //Pendiente Por definir
   user = {
+    foto: "http://graph.facebook.com/" + $idFace + "/picture?type=small",
     nomUser: $nameUser,
     puntaje: 0
   }
@@ -93,7 +118,7 @@ $( document ).ready(function() {
     var cont = 0;
     for (var i = 0; i < participantesOrdenados.length; i++) {
       cont++;
-      html += "<p>"+cont+". "+participantesOrdenados[i].Nombre+" - <b>"+participantesOrdenados[i].Puntaje+"</b></p>";
+      html += "<p>"+cont+". <img class='imgPerfil' src='"+participantesOrdenados[i].Foto+"'>"+participantesOrdenados[i].Nombre+" - <b>"+participantesOrdenados[i].Puntaje+" Pts</b></p>";
     }
     $divRank.html(html);
   }
@@ -162,22 +187,21 @@ $( document ).ready(function() {
   });
 
   $pausa.click(function(){
-      if(comenzar){
-          pausa = !pausa;
-        if(pausa){
-          $(this).removeClass("paused");
-          $(this).addClass("play");
-        }else{
-          $(this).removeClass("play");
-          $(this).addClass("paused");
-        }
-        Juego.paused = pausa;
-      }
+      pausar();
   });
 
   $("body").keypress(function(e){
+    e.preventDefault();
+    console.log(e.keyCode);
     if(e.keyCode=== 32){
-      if(comenzar){
+      pausar();
+    }else if(e.keyCode===109){
+      chageSound();
+    }
+  });
+
+  function pausar(){
+    if(comenzar){
           pausa = !pausa;
         if(pausa){
           $pausa.removeClass("paused");
@@ -188,19 +212,22 @@ $( document ).ready(function() {
         }
         Juego.paused = pausa;
       }
-    }
-  });
+  }
 
-  $sound.click(function(){
+  function chageSound(){
     if(sound){
-      $(this).removeClass("nosound");
-      $(this).addClass("sound");
+      $sound.removeClass("nosound");
+      $sound.addClass("sound");
     }else{
-      $(this).removeClass("sound");
-      $(this).addClass("nosound");
+      $sound.removeClass("sound");
+      $sound.addClass("nosound");
       contSound = 0;
     } 
     sound = !sound;
+  }
+
+  $sound.click(function(){
+    chageSound();
   });
 
  
@@ -220,6 +247,41 @@ $( document ).ready(function() {
     down=false; 
   });
 
+  $left.on('touchstart mousedown',function(){
+    left=true; 
+  });
+
+  $left.on('touchend mouseup',function(){
+    left=false; 
+  });
+
+  $right.on('touchstart mousedown',function(){
+    right=true; 
+  });
+
+  $right.on('touchend mouseup',function(){
+    right=false; 
+  });
+
+  $info.click(function(){
+    alertInfo();
+  });
+  
+
+  function alertInfo(){
+     swal({
+      title: 'Información',
+      html:
+        '<h3>Finalidad</h3>'+
+        '<p align="center">Intenta ser el primero en el ranking al final de la cuenta regresiva y ganarás uno de los premios que tenemos para ti.</p>'+
+        '<h3>Controles</h3>'+
+        '<p align="center">En PC puedes utilizar las teclas de movimiento "Arriba", "Abajo", "Izquierda", "Derecha" también puedes pausar el juego oprimiendo la "Barra de espacio" y quitar el sonido oprimiendo la tecla "M".</p>'+
+        '<p align="center">En Celular puedes utilizar los botones: "A" para saltar, "B" para agacharse, "Flecha Izquierda" moverse hacia atrás y "Flecha Derecha"  moverse hacia adelante.</p>'+
+        '<h3>Sobre nosotros</h3>'+
+        '<a id="tree" href="http://tree-it.co/" target="_blank">Tree-IT</a>'
+    });
+  }; alertInfo();
+
   function diasFaltantes(){
     var Hoy=new Date();
     var Nav=new Date(Hoy.getFullYear(), 01,28 );
@@ -238,11 +300,7 @@ $( document ).ready(function() {
 
 });
 
-
-
-
 /* Fin Socket y Dom */
-
 
 SideScroller.Game.prototype = {
   preload: function() {
@@ -260,7 +318,7 @@ SideScroller.Game.prototype = {
     
 
     //game params
-    this.levelSpeed = -250;
+    levelSpeed = -250;
     this.tileSize = 70;
     this.probCliff = 0.4;
     this.probVertical = 0.4;
@@ -274,7 +332,7 @@ SideScroller.Game.prototype = {
     for(var i=0; i<12; i++) {
       newItem = this.floors.create(i * this.tileSize, this.game.world.height - this.tileSize, 'floor');
       newItem.body.immovable = true;
-      newItem.body.velocity.x = this.levelSpeed;
+      newItem.body.velocity.x = levelSpeed;
     }
 
     //keep track of the last floor
@@ -392,7 +450,7 @@ SideScroller.Game.prototype = {
     if(this.player.alive) {
 
       if(this.player.body.touching.down) {
-        this.player.body.velocity.x = -this.levelSpeed;
+        this.player.body.velocity.x = -levelSpeed;
       }
       else {
         this.player.body.velocity.x = 0;
@@ -413,14 +471,14 @@ SideScroller.Game.prototype = {
         this.player.isDucked = false;
       }
 
-      if(this.cursors.right.isDown){
+      if(this.cursors.right.isDown || right){
         this.playerRight();
-      }else if(this.cursors.left.isDown){
+      }else if(this.cursors.left.isDown || left){
         this.playerLeft()
       }
 
       //restart the game if reaching the edge
-      if(this.player.x <= -this.tileSize+50) {
+      if(this.player.x <= -this.tileSize+20) {
        this.playerDead(2);
       }
       if(this.player.y >= this.game.world.height + this.tileSize) {
@@ -442,7 +500,7 @@ SideScroller.Game.prototype = {
     }
     */
     //generate further terrain
-    fondoMontanas.tilePosition.x += this.levelSpeed/800;
+    fondoMontanas.tilePosition.x += levelSpeed/800;
     this.initSound();
     this.generateTerrain();
 
@@ -472,13 +530,13 @@ SideScroller.Game.prototype = {
           block = this.verticalObstacles.getFirstExists(false);
           if(block!= null){
             block.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 3 * this.tileSize);
-            block.body.velocity.x = this.levelSpeed;
+            block.body.velocity.x = levelSpeed;
             block.body.immovable = true;
           }
           coin = this.coins.getFirstExists(false);
           if(coin != null){
             coin.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 4 * this.tileSize);
-            coin.body.velocity.x = this.levelSpeed;
+            coin.body.velocity.x = levelSpeed;
             coin.body.immovable = true;
           }
 
@@ -488,12 +546,12 @@ SideScroller.Game.prototype = {
             coin = this.verticalObstacles.getFirstExists(false);
             if(block) {
               block.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 4 * this.tileSize);
-              block.body.velocity.x = this.levelSpeed;
+              block.body.velocity.x = levelSpeed;
               block.body.immovable = true;
             }
             if(coin) {
               coin.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 5 * this.tileSize);
-              coin.body.velocity.x = this.levelSpeed;
+              coin.body.velocity.x = levelSpeed;
               coin.body.immovable = true;
             }
             
@@ -505,7 +563,7 @@ SideScroller.Game.prototype = {
               console.log("entra other coins");
               Othercoin.reset(this.lastFloor.body.x + this.tileSize, this.game.world.height - 1.5 * this.tileSize);
               Othercoin.anchor.setTo(0.5, 0.5);
-              Othercoin.body.velocity.x = this.levelSpeed-50;
+              Othercoin.body.velocity.x = levelSpeed-50;
               Othercoin.body.enable = true;
               //Othercoin.angle = -90;
               //Othercoin.body.angularVelocity = this.game.rnd.integerInRange(100, 125);
@@ -518,6 +576,7 @@ SideScroller.Game.prototype = {
           this.lastCliff = false;
           this.lastVertical = false;
         }
+        this.floors.getAt(i).body.velocity.x = levelSpeed;
         this.floors.getAt(i).body.x = this.lastFloor.body.x + this.tileSize + delta * this.tileSize * 1.5;
         this.lastFloor = this.floors.getAt(i);
         break;
@@ -557,18 +616,20 @@ SideScroller.Game.prototype = {
   collect: function(player, collectable) {
     //Suma Puntaje
     puntaje += 2;
-
+    if (puntaje%30 === 0) {
+      levelSpeed -= 20;
+      level += 1;
+    }
     //play audio
     if(sound){
       this.coinSound.play();
     }
     
-
     //remove sprite
     collectable.kill();
   },
   OtherCollect:function(player, collectable){
-    //Suma Puntaje
+    //Resta Puntaje
     puntaje -= 2;
 
     //play audio
@@ -666,5 +727,6 @@ SideScroller.Game.prototype = {
     {
         //this.game.debug.text(this.game.time.fps || '--', 20, 70, "#00ff00", "40px Courier");
         this.game.debug.text(""+puntaje || '--', this.world.width-80, 40, "#ffffff", "40px Courier");
+        this.game.debug.text("Nivel: "+level || '--', 5, 60, "#ffffff", "20px Courier");
     }
 };

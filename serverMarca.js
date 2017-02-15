@@ -30,7 +30,7 @@ var io= require('socket.io').listen(httpServer);
 io.set('log level',1);
 
 
-mongoose.connect('mongodb://104.197.252.243:80/trikatuka',
+mongoose.connect('mongodb://104.197.252.243:80/marcatoon',
   function(err, res) {
     if(err) throw err;
     console.log('Conectado con exito a la BD');
