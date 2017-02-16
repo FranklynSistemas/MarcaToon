@@ -127,6 +127,16 @@ html,body{
 }
 /* Fin style Preloader */
 
+#Load{
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  top: 50%;
+  width: 150px;
+  height: 40px;
+  z-index: 1001;
+}
+
 .container{
   width: 100%;
   height: 100%;
@@ -179,6 +189,32 @@ html,body{
   font-size: 25px;
   color: white;
   font-weight: 600;
+}
+
+#Ocultar{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-left: -8px;
+  margin-top: 0px;
+  background-image: url(../img/findRight.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  display: none;
+}
+
+#Mostrar{
+  position: absolute;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  background-image: url(../img/findLeft.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  cursor: pointer;
+  z-index: 6;
+  display: none;
 }
 
 #Rank{
@@ -376,7 +412,7 @@ html,body{
   width: 64px;
   height: 64px;
   position: relative;
-  float: left;
+  float: right;
   cursor: pointer;
   background: url(../assets/images/button-round-a.png) 64px 64px;
    -webkit-user-select: none;
@@ -393,7 +429,7 @@ html,body{
   width: 64px;
   height: 64px;
   position: relative;
-  float: right;
+  float: left;
   cursor: pointer;
   background: url(../assets/images/button-round-b.png) 64px 64px;
    -webkit-user-select: none;
@@ -529,9 +565,33 @@ and (orientation : landscape) {
     white-space: nowrap;
   }
 
-  #juego{
+  .conRank{
     flex-basis: 78.666667% !important;
     max-width: 78.666667% !important;
+  }
+  .sinRank{
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  canvas{
+    height: 80vh !important;
+  }
+
+  .sinRank canvas{
+    height: 88vh !important;
+  }
+
+  .sinRank #Botones{
+    margin-left: 75% !important;
+  }
+
+  .sinRank #start{
+    margin-left: 72vh;
+  }
+
+  .sinRank #dias{
+    margin-left: 43%;
   }
 
   #Rank{
@@ -543,14 +603,27 @@ and (orientation : landscape) {
     max-width: 20.333333%;
   }
 
-  #divRank{
-    font-size: 10px;
-    height: 40vh;
-    overflow-y: scroll;
+  #titleRank{
+    margin-top: 5px;
+    height: 15px;
   }
 
-  canvas{
-    height: 80vh !important;
+  #titleRank h1{
+    font-size: 1em;
   }
+  
+  #divRank{
+    font-size: 9px;
+    height: 40vh;
+    overflow-y: scroll;
+    padding-left: 10px;
+  }
+
+  .imgPerfil{
+    width: 15px;
+    height: 15px;
+  }
+
+  
 
 }

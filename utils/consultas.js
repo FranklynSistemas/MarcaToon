@@ -56,7 +56,7 @@ exports.AddUser = function(data, callback){
 		data.equipo.participantes.push({
 			Nombre: data.datos.user.nomUser,
 			Puntaje: 0,
-			Foto: datos.user.foto
+			Foto: data.datos.user.foto
 		});
 		updateEquipo({id:data.equipo.id, dateUpd: {participantes:data.equipo.participantes} }, function(result){
 			if (result.status) {
