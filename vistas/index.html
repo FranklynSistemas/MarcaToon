@@ -16,8 +16,11 @@
 		<link rel="manifest" href="js/manifest.json">
 		<link rel="apple-touch-icon-precomposed" href="img/Logo.png"/>
     	<link rel="shortcut icon" type="image/png" href="img/Logo.png"/>
+    	
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
-	    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	    <!--<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>-->
 	    <link rel="stylesheet" href="css/alertify.min.css"/>
 		<link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css">
 	    <link rel="stylesheet" href="css/normalize.css">
@@ -32,14 +35,7 @@
 		<script type="text/javascript" src="js/phaser.min.js"></script>
 		<script type="text/javascript" src="js/Boot.js"></script>
 		<script type="text/javascript" src="js/Preload.js"></script>
-		<script type="text/javascript" src="js/Game.js"></script>
-
-		<style>
-		  body {
-		    padding: 0px;
-		    margin: 0px;
-		  }
-		  </style>
+		<script type="text/javascript" src="js/GameNew.js"></script>
 	</head>
 
 	<body>
@@ -57,7 +53,6 @@
 		</div>
 	<!-- Fin No portrait -->
 	<div id="fb-root"></div>
-		
 		<div class="container">
 			<div id="id" style="display:none">{{user._id}}</div>
 			<div id="idFace" style="display:none">{{user.provider_id}}</div>
@@ -90,12 +85,13 @@
 					<div id="Ocultar"></div>
 			        <div class="box" id="Rank">
 			        			<div id="Equipos"></div>
+			        			<div id="line"><hr class="star-light"></div>
 								<div id="titleRank"><h1>Rank</h1></div>
 								<div id="divRank"></div>
 					</div>
 			    </div>
 			</div>
-			<div class="row">
+			<div class="row" style="margin-top: -2px;">
 			    <div class="col-xs-8" style="padding-right: 0rem !important; background: white;">
 			        <div class="box" id="Comentarios">
 								<center><h1>Comentarios</h1></center>
@@ -112,6 +108,27 @@
 					</div>
 			    </div>
 			</div>
+
+		<div id="menuContent">
+			<div id="loadMenu">
+				<div id="close">X</div>
+				<div id="logo"></div>
+				<div id="contentMenu">
+					<h1><a href="/">Inicio</a></h1>
+					<h1><a class="active" href="/inicio">Juego</a></h1>
+					<h1><a href="/acercade">Acerca de</a></h1>
+					<h1><a href="/paute">Paute con nosotros</a></h1>
+					<h1><a href="/contacto">Contáctenos</a></h1>
+				</div>
+				<div id="footerMenu">
+					<h3>A product of <a href="http://tree-it.co/"  target="_blank">Tree-IT</a></h3>
+				</div>
+			</div>
+		</div>
+		<div id="menuFooter">
+			<span>Menu</span>
+		</div>
+
 		</div>
 		<div id="fb-root"></div>
 		<script>(function(d, s, id) {
@@ -121,6 +138,19 @@
 		  js.src = "//connect.facebook.net/es_LA/sdk.js#xfbml=1&version=v2.8&appId=256510591443908";
 		  fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));</script>
+
+		<script type="text/javascript">
+			var menu = false;
+			$("#menuFooter").click(function(){
+				menu = !menu;
+				menu ? $("#menuContent").fadeIn(300) : $("#menuContent").fadeOut(300);
+			});
+
+			$("#close").click(function(){
+				menu = !menu;
+				$("#menuContent").fadeOut(300);
+			});
+		</script>
 
 		<!-- include the main game file -->
 		<script src="js/main.js"></script>

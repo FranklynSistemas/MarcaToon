@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="google" value="notranslate">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5, user-scalable=no" />
+    <meta name="Description" content="Marketing Divertido">
+    <meta property="og:url"           content="http://marcatoon.com" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="MarcaToon" />
+    <meta property="og:description"   content="Marketing Divertido" />
+    <meta property="og:image"         content="http://marcatoon.com/assets/images/Logo.png" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" href="img/Logo.png"/>
+    <link rel="shortcut icon" type="image/png" href="img/Logo.png"/>
+    <link rel = "manifest" href = "manifest.json">
+    <title>MarcaToon</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+      <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/alertify.min.css"/>
+	  <link rel="stylesheet" href="css/themes/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+     <script type="text/javascript" src="js/isMobile.js"></script>
+     <script src="js/wow.js"></script>
+    <script src="js/script.js"></script>
+  </head>
+  <body>
+  <!-- Preloader -->
+       <div id="faceoff">
+          <div id="preloader"></div>
+          <div class="preloader-section"></div>
+          <div id="Load"></div>
+       </div>
+  <!-- Preloader end -->
+    <div class="container">
+        <div class="video-container">
+              <div class="filter"></div>
+              <video autoplay="autoplay" loop="loop" class="fillWidth">
+                  <source src="videos/Busy.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                  <source src="videos/Busy.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+                  <source src="videos/Busy.ogv" type="video/ogg" />Your browser does not support the video tag. I suggest you upgrade your browser.
+              </video>
+              <!--<div class="poster hidden">
+                  <img src="assets/videos/New-York-Sky.jpg" alt="">
+              </div>-->
+               <div id="content" class="animated bounceInRight">
+                  <h1  class="wow slideInLeft" data-wow-delay="1.4s">Acerca de</h1>
+                  <p align="center"  class="wow slideInLeft" data-wow-delay="1.5s">
+                    <b>MarcaToon</b> es una plataforma web que tiene como objetivo crear marketing divertido, acercando las marcas de nuestros clientes a los usuarios de forma divertida.
+                  </p>
+                  <p align="center"  class="wow slideInLeft" data-wow-delay="1.6s">
+                    Para ello <b>MarcaToon</b> realizará campañas cada semana, mostrando en cada una de ellas las marcas de nuestros clientes y otorgando premios a los usuarios ganadores de cada una.
+                  </p>
+                </div>
+        </div>
+        <div id="menuContent">
+          <div id="loadMenu">
+            <div id="close">X</div>
+            <div id="logo"></div>
+            <div id="contentMenu">
+              <h1><a href="/">Inicio</a></h1>
+              <h1><a href="/inicio">Juego</a></h1>
+              <h1><a class="active" href="/acercade">Acerca de</a></h1>
+              <h1><a href="/paute">Paute con nosotros</a></h1>
+              <h1><a href="/contacto">Contáctenos</a></h1>
+            </div>
+            <div id="footerMenu">
+              <h3>A product of <a href="http://tree-it.co/"  target="_blank">Tree-IT</a></h3>
+            </div>
+          </div>
+        </div>
+        <div id="menuFooter">
+          <span>Menu</span>
+        </div>
+    </div>
+    <script type="text/javascript">
+      var menu = false;
+      $("#menuFooter").click(function(){
+        menu = !menu;
+        menu ? $("#menuContent").fadeIn(300) : $("#menuContent").fadeOut(300);
+      });
+      $("#close").click(function(){
+        menu = !menu;
+        $("#menuContent").fadeOut(300);
+      });
+    </script>
+  </body>
+</html>

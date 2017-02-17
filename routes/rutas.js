@@ -34,6 +34,18 @@ router.get('/inicio', function(req, res, next) {
   }
 });
 
+router.get('/acercade', function(req, res, next) {
+    res.render('acercade');
+});
+
+router.get('/paute', function(req, res, next) {
+      res.render('paute');
+});
+
+router.get('/contacto', function(req, res, next) {
+  res.render('contacto');
+});
+
 router.get('/juego', function(req, res, next) {
   if(req.user){
   	res.render('juego',{user:req.user});
@@ -104,17 +116,8 @@ router.get('/estadisticas',function(req, res, next) {
   }
 });
 //Consultas
-router.post('/traeUser', consultas.traeUser);
-router.get('/traeUsers', consultas.traeUsers);
-router.post('/editarUser', consultas.editarUser);
-router.get('/traeEventos', consultas.traeEventos);
-router.get('/traeEvento', consultas.traeEvento);
-router.post('/crearEvento', consultas.crearEvento);
-router.post('/editarEvento', consultas.editarEvento);
-//router.post('/creaEquipo', consultas.creaEquipo);
-router.get('/traeGrupos', consultas.traeGrupos);
-router.post('/agregarUser', consultas.agregarUser);
-router.get('/traeEstadisticas', consultas.traeEstadisticas);
+
+router.post('/registrar', consultas.registrar);
 
 router.post('/upload',consultas.Uploads);
 

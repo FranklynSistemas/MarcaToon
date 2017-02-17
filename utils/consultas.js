@@ -5,9 +5,15 @@ var uuid = require('uuid');
 require('../models/user');
 require('../models/promociones');
 require('../models/equipos');
+require('../models/paute');
+require('../models/contacto');
 var User = mongoose.model('user');
 var Promo = mongoose.model('promociones');
 var Equipo = mongoose.model('equipos');
+var Paute = mongoose.model('paute');
+var Contacto = mongoose.model('contacto');
+
+var bd = [Paute,Contacto];
 
 
 exports.traeEquipo =  function (idEquipo, callback) {
@@ -104,6 +110,19 @@ exports.getEquipos = function(callback){
 		}else{
 			callback({status:false});
 		}
+	});
+}
+
+exports.registrar = function (req, res) {
+	var registra;
+	if(req.body.type === 1){
+		registra = new Paute(req.body.info);
+	}else{
+		registra = new Contacto(req.body.info);
+	}
+	registra.save(function(err) {
+	    if(err) throw err;
+	        res.json({status:true});
 	});
 }
 

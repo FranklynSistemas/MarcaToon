@@ -1,316 +1,206 @@
 $(function()
 {
-	var websocket = io.connect();
-		var Puntaje=0, // variable que guardara el puntaje del usuario  
-		tiempo = 1000; //Velocidad del reloj en milisegundos
-		segundos = 00;
-		minutos = 1;
-		horas = 1;
-		numExitos = 0,
-		NumNumeros=121,
-		numClick = 0, // Variable que guarda el numero de clicks realizados por el usuario
-		Juego = [], //Guarda toda la matriz del juego
-		NomUser = '',
-		tabla = '',
-		newJuego = 30;
+	var wow = new WOW(
+	  {
+	    boxClass:     'wow',      // animated element css class (default is wow)
+	    animateClass: 'animated', // animation css class (default is animated)
+	    offset:       0,          // distance to the element when triggering the animation (default is 0)
+	    mobile:       true,       // trigger animations on mobile devices (default is true)
+	    live:         true,       // act on asynchronously loaded content (default is true)
+	    callback:     function(box) {
+	      // the callback is fired every time an animation is started
+	      // the argument that is passed in is the DOM node being animated
+	    },
+	    scrollContainer: null // optional scroll container selector, otherwise use window
+	  }
+	);
+	wow.init();
+	
+	var campos = ['empresa','persona','telefono','correo'];
+	var camposCto = ['nombreCto','correoCto','mensaje'];
 
+	/*(function init(){
+		if (isMobile.any()) {
+			$(".fillWidth").css('display','none');
+		}
+	})();*/
 
-// Inicialización de componentes repetitivos del DOM
-	var DomPuntos = $("#Puntos"),
-		DomMensajes = $('#Mensajes'),
-		DomNum = $("#NumeroaBuscar"),
-		DomUser = $("#Usuario"),
-		DomId = $("#id");
-
-		
-//se crea un json con sonidos...
-	var audios = [
-					{
-						sonido 	: 	"success.mp3", 
-						label	: 	"success"
-					},
-					{
-						sonido 	: 	"error.mp3", 
-						label	: 	"error"
-					},
-					{
-						sonido 	: 	"tada.mp3", 
-						label	: 	"tada"
-					}
-				 ];
-	var sound = true;	
-
-		
-	alertify.prompt("<center style='font-size:30px'>Nickname</center>", "",
-  		function(evt, value ){
-  		websocket.emit('newUser',{Nombre:value,Puntaje: 0,Color: lib.randomColor()});
-    	websocket.on('error',function(data){
-    		if(data){
-    			alertify.alert('El Usuario ya Existe');
-    			setTimeout(function(){location.reload()},1000);
-    		}else{
-    			websocket.on('conectados',function(info){
-    				alertify.success("Bienvenido "+info.Nombre);
-    				NomUser = info.Nombre;
-    				numClick = info.Clicks;
-    			});
-    		}
-    	});
-  	},function(){
-    	alertify.error('Jugara solo');
-  	});
-  
-		
-//Genera una nueva de grilla de numeros Aleatorios
-	function iniciaJuego(){
-		Juego = lib.generaGrilla();
-		if(Juego[0].length === 12){Juego[0].shift(); DibujaJuego(Juego);}else{DibujaJuego(Juego);};
-	};
-
-/*
-  	function init(){
-  		//console.log(DomUser);
-  		setTimeout(function(){
-  		websocket.emit('newUser',{Nombre:DomUser.text(),Puntaje: 0, Color: lib.randomColor()});
-  		websocket.on('error',function(data){
-    		if(data){
-    			alertify.alert('El Usuario ya Existe');
-    			//setTimeout(function(){location.reload()},1000);
-    			//Emitir una desconeccion y volver a conectar
-    		}else{
-    			websocket.on('conectados',function(info){
-    				alertify.success("Bienvenido "+info.Nombre);
-    				NomUser = info.Nombre;
-    				numClick = info.Clicks;
-    			});
-    		}
-    	});
-  	},1000);
-  	}init();
-*/
-
-	websocket.on('Users',function(data){
-		$("#Users").html("");
-		var cont = 0;
-		for (var i = data.length - 1; i >= 0; i--) {
-			cont++;
-			$("#Users").append("<b id='b' style='color:"+data[i].Color+"'>"+cont+". "+data[i].Nombre+" - "+data[i].Puntaje+"</b><br>");
-		};
-		reloadTable(data,0);
-		if(data.length<=1){
-			iniciaJuego();
-			websocket.emit('IniJuego',Juego);
-			numClick = 0;
+	$('#'+campos[3]).keydown(function(){
+		if(validarEmail( $(this).val() )){
+			$(this).css('border-color','#444f5a');
 		}else{
-			websocket.emit('ingresaNewUser');
-			websocket.on('inicioJuego',function(juego){
-				//console.log(juego);
-				DibujaJuego(juego);
-				Juego = juego;
-			});
+			$(this).css('border-color','red');
 		}
 	});
 
-	websocket.on('Actualiza',function(data){
-		$("#Users").html("");
-		var cont = 0;
-		for (var i = data.length - 1; i >= 0; i--) {
-			cont++;
-			$("#Users").append("<div id='txt'><b id='b' style='color:"+data[i].Color+"'>"+cont+". "+data[i].Nombre+" - "+data[i].Puntaje+"</b></div>");
-		};
-		reloadTable(data,0);
-	});
-
-	websocket.on('DibujeJuego',function(data){
-		Juego = data.Juego;
-		numClick = data.Clicks;
-		DibujaJuego(Juego);
-	})
-
-	websocket.on("Desconectado",function(info){
-		alertify.error("El usuario: "+info+" se a desconectado");
-	});
-
-	websocket.on("Puntua",function(info){
-		alertify.error("El usuario: "+info+" ¡Puntua!");
-	});
-
-	websocket.on("BorraPuntajes",function(){
-		Puntaje = 0;
-		DomPuntos.html(Puntaje);
-	});
-
-	websocket.on("SeReiniciaJuego",function(data){
-		reloadTable(data,1);
-		alertify.dialog('alert').set({transition:'slide',title: "<b>El sistema reinicio el juego</b> " ,message: "<h3>Los puntajes quedaron así: </h3>"+tabla}).show(); 
-	});
-
-function reloadTable(data,tipo){
-		tabla = '';
-		if(tipo===1){
-			var cont = 0;
-			for (var i = data.usuarios.length - 1; i >= 0; i--) {
-				cont++;
-				tabla += "<p>"+cont+". "+data.usuarios[i].Nombre+" - "+data.usuarios[i].Puntaje+"</p>";
-			};
+	$('#'+camposCto[1]).keydown(function(){
+		if(validarEmail( $(this).val() )){
+			$(this).css('border-color','#444f5a');
 		}else{
-			var cont = 0;
-			for (var i = data.length - 1; i >= 0; i--) {
-				cont++;
-				tabla += "<p>"+cont+". "+data[i].Nombre+" - "+data[i].Puntaje+"</p>";
-			};
+			$(this).css('border-color','red');
 		}
-}
-
-// Función que permite dibujar la cuadricula en el id="Juego" segun la mariz optenida por lib.generaGrilla() del Archivo juego.js
-function DibujaJuego(Juego){
-      DomMensajes.html("");
-      DomNum.html(numClick+1);
-       var tds = '<table id="MyTable">'+
-                    '<tbody>';
-    	for (var i = 0; i < Juego.length; i++) {
-    		tds += '<tr>';
-    		for (var j = 0; j < Juego[i].length; j++) {
-    				if(!Juego[i][j].Clickeado){
-    					tds += "<td><div id='"+Juego[i][j].Id+"' class='cuadrado "+Juego[i][j].Clase+"' style='background-color:"+Juego[i][j].Color+"'><div id='Numero'>"+Juego[i][j].Numero+"<div></div></td>";
-    				}
-    		};
-    		tds += '</tr>';
-    	};
-    		tds += '</tbody></table>';
-			$("#Juego").html(tds);
-// Se asignan los eventos a todos los div de clase .cuadrado			
-	$(".cuadrado").click(function() {
-		  numClick++;
-          var oID = $(this).attr("id");
-          console.log(oID);
-          validaClick(oID,numClick);
 	});
-}
 
-//Valida si al div que le dan click posee el numero que debe ser dependendo la cantidad de clicks dados
-function validaClick(id,click){
- var idSeparado = id.split("_");
-	if(Juego[idSeparado[0]][idSeparado[1]].Numero === click){
-		sound === true ? createjs.Sound.play("success") : console.log("nosound");
-		numExitos++;
-		Juego[idSeparado[0]][idSeparado[1]].Clickeado = true;
-		$("#"+id).removeClass("cuadrado ").addClass("Puntaje");
-		$("#"+id).html("<div id='Numero'><b>¡10 puntos!<b></div>").fadeOut(800);
-		DomPuntos.html(Puntaje+=10);
-		if(numClick<NumNumeros){
-			DomNum.html(numClick+1);
+	$('#btnEnviar').click(function(){
+		var result = validaCampos(campos,1);
+		if(typeof result == 'object'){
+			enviarDatos(result,1);
+		}else{
+			$('#'+campos[result]).css('border-color','red');
 		}
-		websocket.emit('juega',{Juego:Juego,Clicks:click,Nombre:NomUser,Puntaje: Puntaje});	
-		return true;
-	}else{
-		numClick--;
-		sound === true ? createjs.Sound.play("error") : console.log("nosound");
-		return false;
+	});
+
+	$('.inputPaute').keydown(function(){
+		for (var i = 0; i < campos.length; i++) {
+			if(i!=3){
+				$('#'+campos[i]).css('border-color','#444f5a');
+			}
+		}
+		for (var i = 0; i < camposCto.length; i++) {
+			if(i!=1){
+				$('#'+camposCto[i]).css('border-color','#444f5a');
+			}
+		}
+	});
+
+	$('#mensaje').keydown(function(){
+		$('#'+camposCto[2]).css('border-color','#444f5a');
+	});
+
+	$('#btnEnviarCto').click(function(){
+		var result = validaCampos(camposCto,2);
+		if(typeof result == 'object'){
+			enviarDatos(result,2);
+		}else{
+			$('#'+camposCto[result]).css('border-color','red');
+		}
+	});
+	
+	function validaCampos(cps,type){
+		var datos =[];
+		for (var i = 0; i < cps.length; i++) {
+			var campo = $('#'+cps[i]).val();
+			if(campo === ""){
+				return i;
+			}else{
+				datos.push(campo);
+			} 
+		}
+		return type === 1 ? {Empresa:datos[0], Persona:datos[1], Telfono: datos[2], Correo: datos[3] } : {Nombre:datos[0], Correo:datos[1], Mensaje: datos[2] } ;	
 	}
 
-}
+	function validarEmail( email ) {
+	    expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	    if ( !expr.test(email) ){
+	        return false;
+	    }else{
+	    	return true;
+	    }
+	}
 
-// Genera el tiempo para completar el juego y lo muestra en el DOM
-var     segundosString = '00',
-		minutosString = '00',
-		horasString = '00',
-		reloj='',
-		fin = false;
-function timer(){
-	if(numClick<NumNumeros){	
-		if(segundos<60){
-			segundosString = segundos<10 ? "0"+segundos++ : segundos++;
-		}else if(minutos<60){
-			minutosString = minutos<10 ? "0"+minutos++ : minutos++;
-			segundos=0;
-		}else if(horas<24){
-			horasString = horas<10 ? "0"+horas++ : horas++;
-			minutos=0;
+	function enviarDatos(datos,type){
+		$.ajax(
+		    {
+		      url     : "/registrar",
+		      type    : "POST", 
+		      data    : JSON.stringify({type:type, info: datos}), 
+		      dataType  : "json",
+		      contentType: "application/json; charset=utf-8"
+		    }).done(function(data)
+		    { 
+		    	if(data.status){
+		    		swal(
+						  'Se envió la información correctamente',
+						  'Pronto nos pondremos en contacto contigo',
+						  'success'
+						)
+		    		limpiaCampos();
+		    	}
+		    });
+	}
+
+	function limpiaCampos(){
+		for (var i = 0; i < campos.length; i++) {
+			$('#'+campos[i]).val("");
 		}
-	}else{
-		if(!fin){
-			//alertify.alert("<b>Felicitaciones a terminado el juego en: "+horas+":"+minutos+":"+segundos+" y su puntaje fue de: "+Puntaje+"</b>");
-			alertify.dialog('alert').set({transition:'slide',title: "Fin del juego" ,message: "<h3>Los puntajes quedaron así: </h3>"+tabla}).show(); 
-			numClick = 0;
-			websocket.emit("ActualizaClicks");
-			sound === true ? createjs.Sound.play("tada") : console.log("nosound");
-			fin = true;
-			newGame();
+		for (var i = 0; i < camposCto.length; i++) {
+			$('#'+camposCto[i]).val("");	
 		}
 	}
-	reloj = horasString+":"+minutosString+":"+segundosString;
-	$("#Cronometro").html(reloj);
-	setTimeout(function(){timer()},tiempo);
-}timer();
 
+$(window).load(function() {
+	var preloaderDelay = 1500;
 
-$('#Start').click(function(){
-	alertify.confirm("Desea reiniciar el Juego", function(){
-		reiniciaTodo();
-	});
+	  function hidePreloader() {
+	      //will first fade out the loading animation
+	      $(".preloader").fadeOut();
+	      //then background color will fade out slowly
+	      $("#faceoff").delay(preloaderDelay).fadeOut("slow");
+	    }
+
+	hidePreloader();
 });
 
-function reiniciaTodo(){
-		numClick=0;
-		Puntaje=0;
-		newJuego=30;
-		Juego = [];
-		DomPuntos.html(Puntaje);	
-		iniciaJuego()
-		DomMensajes.html("");
-		segundos = 00;
-		minutos = 00;
-		horas = 00;
-		fin = false;
-		websocket.emit('reiniciaJuego',{Juego: Juego, Clicks: numClick});		
-}
-
-
-function newGame(){
-	if(newJuego>0){
-		DomMensajes.html('<p id="Msg"> El juego se reiniciara automáticamente en: '+newJuego+'</p>');
-		newJuego--;
-		setTimeout(function(){newGame();},1000);
-	}else{
-		reiniciaTodo();
-	}	
-}
-
-
-// Prohíbe el uso de ctrl + f tomado de http://stackoverflow.com/questions/7091538/is-it-possible-to-disable-ctrl-f-of-find-in-page
-window.addEventListener("keydown",function (e) {
-    if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) { 
-        e.preventDefault();
-    }
-});
-
-
-//======================Area sonidos==============================================
-
-				 
-	//Se cargan los sonidos...	
-	function Sonidos(){
-		for(var audio = 0; audio < audios.length; audio++)
-	{
-		createjs.Sound.registerSound("sounds/" + audios[audio].sonido, audios[audio].label);
-	}
-	$("#sound").click(function(event)
-	{
-		if(sound)
-		{
-			sound=false;
-			$("#sound").removeClass('sound');
-			$("#sound").addClass('nosound');
-		}
-		else
-		{
-			sound=true;
-			$("#sound").removeClass('nosound');
-			$("#sound").addClass('sound');
-		}
-	});
-}Sonidos();			 
+$( document ).ready(function() {
 	
 
+    scaleVideoContainer();
+
+    initBannerVideoSize('.video-container .poster img');
+    initBannerVideoSize('.video-container .filter');
+    initBannerVideoSize('.video-container video');
+
+    $(window).on('resize', function() {
+        scaleVideoContainer();
+        scaleBannerVideoSize('.video-container .poster img');
+        scaleBannerVideoSize('.video-container .filter');
+        scaleBannerVideoSize('.video-container video');
+    });
+
+});
+
+function scaleVideoContainer() {
+
+    var height = $(window).height() + 5;
+    var unitHeight = parseInt(height) + 'px';
+    $('.homepage-hero-module').css('height',unitHeight);
+
+}
+
+function initBannerVideoSize(element){
+
+    $(element).each(function(){
+        $(this).data('height', $(this).height());
+        $(this).data('width', $(this).width());
+    });
+
+    scaleBannerVideoSize(element);
+
+}
+
+function scaleBannerVideoSize(element){
+
+    var windowWidth = $(window).width(),
+    windowHeight = $(window).height() + 5,
+    videoWidth,
+    videoHeight;
+
+    $(element).each(function(){
+        var videoAspectRatio = $(this).data('height')/$(this).data('width');
+
+        $(this).width(windowWidth);
+
+        if(windowWidth < 1000){
+            videoHeight = windowHeight;
+            videoWidth = videoHeight / videoAspectRatio;
+            $(this).css({'margin-top' : 0, 'margin-left' : -(videoWidth - windowWidth) / 2 + 'px'});
+
+            $(this).width(videoWidth).height(videoHeight);
+        }
+
+        $('.homepage-hero-module .video-container video').addClass('fadeIn animated');
+
+    });
+}
+	
 });

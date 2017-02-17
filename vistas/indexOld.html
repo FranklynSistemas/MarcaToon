@@ -18,20 +18,53 @@
     <link rel = "manifest" href = "manifest.json">
     <title>MarcaToon</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+      <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+    <!--<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>-->
     <link rel="stylesheet" href="css/alertify.min.css"/>
 	  <link rel="stylesheet" href="css/themes/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/stylelogin.css">
 
     <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="js/wow.js"></script>
     <script src="js/scriptInicio.js"></script>
   </head>
   <body>
+  <!-- Preloader -->
+       <div id="faceoff">
+          <div id="preloader"></div>
+          <div class="preloader-section"></div>
+          <div id="Load"></div>
+       </div>
+  <!-- Preloader end -->
   <div id="container">
-    <div id="img"></div>
-    <div id="Proceso">
+  <section id="one">
+   <div id="contenedor">            
+      <div class="video-container">
+          <div class="filter"></div>
+            <video autoplay="autoplay" loop="loop" class="fillWidth">
+             <source src="videos/Merry-Go-Round.mp4" type="video/mp4" />Your browser does not support the video tag. I suggest you upgrade your browser.
+             <source src="videos/Merry-Go-Round.webm" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.
+             <source src="videos/Merry-Go-Round.ogv" type="video/ogg" />Your browser does not support the video tag. I suggest you upgrade your browser.
+          </video>
+          <div id="text" class="wow slideInLeft" data-wow-delay="1s">
+            <h1>MarcaToon</h1>
+            <p>¡Es la forma divertida de ganar premios cada semana!</p>
+          </div>
+          <div id="comenzar" class="wow slideInLeft" data-wow-delay="1.2s">Comenzar</div>
+        </div>
+    </div>
+  </section>
+  <section id="two">
+    <div id="img" class="wow slideInLeft" data-wow-delay=".2s"></div>
+    <div id="Proceso" class="wow slideInLeft" data-wow-delay=".3s">
       <div class="row around-xs">
           <div class="col-xs-2">
               <div class="box bolas unoSin" id="uno">
@@ -49,16 +82,16 @@
     </div>
     <div id="Pasos">
       <div id="vistaUno">
-        <div id="tituloUno"><h1>¡Elige tu equipo!</h1></div>
+        <div id="tituloUno" class="wow slideInLeft" data-wow-delay=".4s"><h1>¡Elige tu equipo!</h1></div>
           <div class="row">
               <div class="col-xs-6">
                   <div class="box marcas">
-                    <div id="marcaUno"></div>
+                    <div id="marcaUno" class="wow slideInLeft" data-wow-delay=".5s"></div>
                   </div>
               </div>
-              <div class="col-xs-6">
+              <div class="col-xs-6" >
                   <div class="box marcas">
-                    <div id="marcaDos"></div>
+                    <div id="marcaDos" class="wow slideInRight" data-wow-delay=".6s"></div>
                   </div>
               </div>
           </div>
@@ -89,6 +122,39 @@
           <a id="afacebook" href='auth/facebook' type="button" class="btn btn-lg btn-block"> Ingresar con Facebook <img id="facebook" src="./img/facebook.png"></a>
         </div>
       </div>
+    </div>
+    </section>
+    <div id="menuContent">
+          <div id="loadMenu">
+            <div id="close">X</div>
+            <div id="logo"></div>
+            <div id="contentMenu">
+              <h1><a class="active" href="/">Inicio</a></h1>
+              <h1><a href="/inicio">Juego</a></h1>
+              <h1><a href="/acercade">Acerca de</a></h1>
+              <h1><a href="/paute">Paute con nosotros</a></h1>
+              <h1><a href="/contacto">Contáctenos</a></h1>
+            </div>
+            <div id="footerMenu">
+              <h3>A product of <a href="http://tree-it.co/"  target="_blank">Tree-IT</a></h3>
+            </div>
+          </div>
+        </div>
+        <div id="menuFooter">
+          <span>Menu</span>
+        </div>
+      <script type="text/javascript">
+        var menu = false;
+        $("#menuFooter").click(function(){
+          menu = !menu;
+          menu ? $("#menuContent").fadeIn(300) : $("#menuContent").fadeOut(300);
+        });
+        $("#close").click(function(){
+          menu = !menu;
+          $("#menuContent").fadeOut(300);
+        });
+
+      </script>
     </div>
   </body>
 </html>
